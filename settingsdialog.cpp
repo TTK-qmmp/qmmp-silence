@@ -15,14 +15,22 @@ SettingsDialog::SettingsDialog(QWidget *parent)
         button->setFocusPolicy(Qt::NoFocus);
     }
 #endif
+#if QT_VERSION >= QT_VERSION_CHECK(6,0,0)
+    QSettings settings;
+#else
     QSettings settings(Qmmp::configFile(), QSettings::IniFormat);
+#endif
     m_ui.value->setValue(settings.value("Silence/threshold", -40).toDouble());
 }
 
 void SettingsDialog::accept()
 {
     const double value = m_ui.value->value();
+#if QT_VERSION >= QT_VERSION_CHECK(6,0,0)
+    QSettings settings;
+#else
     QSettings settings(Qmmp::configFile(), QSettings::IniFormat);
+#endif
     settings.setValue("Silence/threshold", value);
 
     if(SilencePlugin::instance())
