@@ -4,7 +4,11 @@
 
 #include <QMessageBox>
 
+#if (QMMP_VERSION_INT < 0x10700) || (0x20000 <= QMMP_VERSION_INT && QMMP_VERSION_INT < 0x20200)
 const EffectProperties EffectSilenceFactory::properties() const
+#else
+EffectProperties EffectSilenceFactory::properties() const
+#endif
 {
     EffectProperties properties;
     properties.name = tr("Silence Removal Plugin");
@@ -19,10 +23,17 @@ Effect *EffectSilenceFactory::create()
     return new SilencePlugin();
 }
 
+#if (QMMP_VERSION_INT < 0x10700) || (0x20000 <= QMMP_VERSION_INT && QMMP_VERSION_INT < 0x20200)
 void EffectSilenceFactory::showSettings(QWidget *parent)
 {
     (new SettingsDialog(parent))->show();
 }
+#else
+QDialog *EffectSilenceFactory::createSettings(QWidget *parent)
+{
+    return new SettingsDialog(parent);
+}
+#endif
 
 void EffectSilenceFactory::showAbout(QWidget *parent)
 {
