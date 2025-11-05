@@ -1,7 +1,7 @@
 #include "silenceplugin.h"
 
+#include <cmath>
 #include <QSettings>
-#include <qmath.h>
 
 static float* alignFrame(int channels, float* begin, float* sample, bool end)
 {
@@ -25,9 +25,9 @@ SilencePlugin::SilencePlugin()
 {
     m_instance = this;
 #if QT_VERSION >= QT_VERSION_CHECK(6,0,0)
-    QSettings settings;
+    const QSettings settings;
 #else
-    QSettings settings(Qmmp::configFile(), QSettings::IniFormat);
+    const QSettings settings(Qmmp::configFile(), QSettings::IniFormat);
 #endif
     m_threshold = settings.value("Silence/threshold", -40).toDouble();
 }
